@@ -52,4 +52,14 @@ MongoClient.connect(connectionURL, {
 
         console.log(tasks);
     });
+
+    db.collection('users').updateOne(
+        {_id: new ObjectId('5ef27d715703362338b67141')},
+        {
+            $set: {
+                name: 'Frank'
+            }
+        })
+        .then(result => console.log(result))
+        .catch(error => console.log(error));
 });

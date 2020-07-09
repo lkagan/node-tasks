@@ -77,8 +77,12 @@ MongoClient.connect(connectionURL, {
     //     .then(result => console.log(result))
     //     .catch(error => console.log(error));
 
-    db.collection('tasks').updateMany({completed: false}, {$set: {completed: true}})
-        .then(result => console.log(result))
+    // db.collection('tasks').updateMany({completed: false}, {$set: {completed: true}})
+    //     .then(result => console.log(result))
+    //     .catch(error => console.log(error));
+
+    db.collection('users').deleteMany({age: 28})
+        .then(result => console.log(result.deletedCount))
         .catch(error => console.log(error));
 });
 

@@ -10,9 +10,11 @@ const User = mongoose.model('User', {
     name: {
         type: String,
         required: true,
+        trim: true,
     },
     age: {
         type: Number,
+        default: 0,
         validate: (value) => {
             if (value < 0) {
                 throw new Error('Age must be a positive number');
@@ -21,6 +23,8 @@ const User = mongoose.model('User', {
     },
     email: {
         type: String,
+        trim: true,
+        lowercase: true,
         required: true,
         validate: (value) => {
             if (! validator.isEmail(value)) {
@@ -31,8 +35,8 @@ const User = mongoose.model('User', {
 });
 
 const me = new User({
-    name: 'Mike',
-    email: 'mike@',
+    name: '   Larry ',
+    email: 'ME@LARRYKAGAN.COM  '
 });
 
 me.save()

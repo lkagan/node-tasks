@@ -31,17 +31,39 @@ const User = mongoose.model('User', {
                 throw new Error('Email is invalid');
             }
         }
+    },
+    password: {
+        type: String,
+        trim: true,
+        required: true,
+        minlength: 6,
+        validate: (value) => {
+            if (value.toLowerCase().includes('password')) {
+                throw new Error('Password can not contain the word "password"');
+            }
+        }
+
     }
 });
 
-const me = new User({
-    name: '   Larry ',
-    email: 'ME@LARRYKAGAN.COM  '
+// const me = new User({
+//     name: '   Larry ',
+//     email: 'ME@LARRYKAGAN.COM  '
+// });
+//
+// me.save()
+//     .then(() => console.log(me))
+//     .catch(error => console.log('Error', error));
+
+const user = new User({
+    name: 'John Doe',
+    email: 'test@test.com',
+    password: 'testing123'
 });
 
-me.save()
-    .then(() => console.log(me))
-    .catch(error => console.log('Error', error));
+user.save()
+    .then(_ => console.log(user))
+    .catch(error => console.log(error));
 
 // const Task = mongoose.model('Task', {
 //     completed: {type: Boolean},

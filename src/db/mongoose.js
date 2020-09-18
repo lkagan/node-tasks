@@ -55,23 +55,32 @@ const User = mongoose.model('User', {
 //     .then(() => console.log(me))
 //     .catch(error => console.log('Error', error));
 
-const user = new User({
-    name: 'John Doe',
-    email: 'test@test.com',
-    password: 'testing123'
-});
-
-user.save()
-    .then(_ => console.log(user))
-    .catch(error => console.log(error));
-
-// const Task = mongoose.model('Task', {
-//     completed: {type: Boolean},
-//     description: {type: String}
+// const user = new User({
+//     name: 'John Doe',
+//     email: 'test@test.com',
+//     password: 'testing123'
 // });
 //
-// const myTask = new Task({completed: false, description: 'Go to store'});
-//
-// myTask.save()
-//     .then((myTask) => console.log('Added task', myTask))
-//     .catch((e) => console.log(e));
+// user.save()
+//     .then(_ => console.log(user))
+//     .catch(error => console.log(error));
+
+const Task = mongoose.model('Task', {
+    completed: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    description: {
+        type: String,
+        trim: true,
+        required: true,
+    }
+});
+
+// const myTask = new Task({completed: false });
+const myTask = new Task({description: '      Go to store again     '});
+
+myTask.save()
+    .then((myTask) => console.log('Added task', myTask))
+    .catch((e) => console.log(e));

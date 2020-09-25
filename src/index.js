@@ -1,4 +1,5 @@
 require('./db/mongoose')
+const mongoose = require('mongoose')
 const User = require('./models/user')
 const Task = require('./models/task')
 const express = require('express')
@@ -51,4 +52,21 @@ app.post('/tasks', (req, res) => {
         .catch(e => {
             res.status(400).send(e)
         })
+})
+
+app.get('/tasks', (req, res) => {
+    Task.find({})
+        .then(tasks => tasks ? res.send(tasks) : res.status(404).send())
+        .catch(e => res.status(500).send())
+})
+
+app.get('/tasks/:id', (req, res) => {
+    const _id = req.params.id
+
+    if (! mongoose.Types.ObjectId.isValid(_id)) {
+        res.status(404).send()
+    }
+    Task.findById(req.params.id)
+        .then(task => task ? res.send(task) : res.status(404).send())
+        .catch(e => res.status(500).send())
 })

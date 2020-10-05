@@ -10,63 +10,70 @@ app.listen(port, () => console.log('Server is up on port ' + port))
 // Automatically parse incoming JSON to an object.
 app.use(express.json())
 
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
     const user = new User(req.body)
-    user.save()
-        .then(() => {
-            res.status(201).send(user)
-        })
-        .catch(e => {
-            res.status(400).send(e)
-        })
+
+    try {
+        await user.save()
+        res.status(201).send(user)
+    } catch (e) {
+        res.status(400).send(e)
+    }
 })
 
-app.get('/users', (req, res) => {
-     User.find({})
-         .then((users) => {
-            res.send(users)
-         })
-         .catch((e) => {
-            res.status(500).send(e)
-         })
+app.get('/users', async (req, res) => {
+    try {
+        const users = await User.find({})
+        res.send(users)
+    } catch(e) {
+        res.status(500).send(e)
+    }
 })
 
-app.get('/users/:id', (req, res) => {
-    User.findById(req.params.id)
-        .then(user => {
-            if (!user) {
-                return res.status(404).send()
-            }
+app.get('/users/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
 
-            return  res.send(user)
-        })
-        .catch(e => res.status(500).send(e))
+        if (!user) {
+            return res.status(404).send()
+        }
+
+        return  res.send(user)
+    } catch (e) {
+        res.status(500).send(e)
+    }
 })
 
-app.post('/tasks', (req, res) => {
+app.post('/tasks', async (req, res) => {
     const task = new Task(req.body)
-    task.save()
-        .then(() => {
-            res.status(201).send(task)
-        })
-        .catch(e => {
-            res.status(400).send(e)
-        })
+
+    try {
+        await task.save()
+        res.status(201).send(task)
+    } catch (e) {
+        res.status(400).send(e)
+    }
 })
 
-app.get('/tasks', (req, res) => {
-    Task.find({})
-        .then(tasks => tasks ? res.send(tasks) : res.status(404).send())
-        .catch(e => res.status(500).send())
+app.get('/tasks', async (req, res) => {
+    try {
+        const tasks = await Task.find({})
+    } catch (e) {
+        res.status(500).send()
+    }
 })
 
-app.get('/tasks/:id', (req, res) => {
+app.get('/tasks/:id', async (req, res) => {
     const _id = req.params.id
 
     if (! mongoose.Types.ObjectId.isValid(_id)) {
         res.status(404).send()
     }
-    Task.findById(req.params.id)
-        .then(task => task ? res.send(task) : res.status(404).send())
-        .catch(e => res.status(500).send())
+
+    try {
+        const task = await Task.findById(req.params.id)
+        task ? res.send(task) : res.status(404).send()
+    } catch (e) {
+        res.status(500).send()
+    }
 })

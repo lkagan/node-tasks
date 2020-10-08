@@ -103,3 +103,27 @@ app.get('/tasks/:id', async (req, res) => {
         res.status(500).send()
     }
 })
+
+app.patch('/tasks/:id', async (req, res) => {
+    const allowed = ['completed', 'description']
+
+    if (! Object.keys(req.body).every(field => allowed.includes(field))) {
+        return res.status(400).send('Invalid updates!')
+    }
+
+    try {
+        const task = await Task.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {new: true, runValidators: true}
+        )
+
+        if (! task) {
+            return res.status(404).send()
+        }
+
+        res.send(task)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+})
